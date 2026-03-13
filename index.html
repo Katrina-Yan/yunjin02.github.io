@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云锦华章 - 千年云锦的故事</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+        }
+
+        /* 变量定义 - 国风配色 */
+        :root {
+            --primary-color: #9D2933; /* 朱红 */
+            --secondary-color: #F2C94C; /* 明黄 */
+            --dark-color: #2C2C2C; /* 墨黑 */
+            --light-color: #F8F5F0; /* 米白 */
+            --gray-color: #666666; /* 深灰 */
+            --border-color: #D9B38C; /* 浅棕边框 */
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-left: 260px; /* 为左侧目录预留空间 */
+        }
+
+        /* 左侧固定目录 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background-color: var(--white);
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+            padding: 2rem 1rem;
+            z-index: 101; /* 高于导航栏 */
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1.2rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(157, 41, 51, 0.05);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-icon {
+            font-size: 1.2rem;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: var(--dark-color);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* 移动端导航适配 */
+        @media (max-width: 1200px) {
+            body {
+                padding-left: 0; /* 移动端取消左侧预留空间 */
+            }
+
+            .sidebar {
+                display: none; /* 移动端隐藏侧边目录 */
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 240px;
+                height: 100vh;
+                z-index: 999;
+            }
+
+            .sidebar.show {
+                display: block; /* 点击菜单按钮显示 */
+            }
+
+            .mobile-sidebar-toggle {
+                display: block; /* 移动端显示目录切换按钮 */
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-right: 1rem;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .mobile-sidebar-toggle {
+            display: none; /* 默认隐藏移动端目录按钮 */
+        }
+
+        /* Banner样式 */
+        .banner {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('./image/index01.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .banner-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .banner h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #7a1f28;
+        }
+
+        /* 详情按钮样式 */
+        .detail-btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            padding: 0.6rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 1.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .detail-btn:hover {
+            background-color: #e0b83c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 通用内容容器 */
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            margin: 1rem auto;
+        }
+
+        /* 云锦故事部分 */
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .story-img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .story-img:hover {
+            transform: translateY(-5px);
+        }
+
+        .story-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .story-text p {
+            margin-bottom: 1rem;
+            color: var(--gray-color);
+            font-size: 1.05rem;
+        }
+
+        /* 历史渊源部分 */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::after {
+            right: -10px;
+        }
+
+        .right::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+        }
+
+        .timeline-content h4 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--gray-color);
+        }
+
+        /* 工艺特色部分 */
+        .craft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .craft-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .craft-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .craft-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .craft-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .craft-card p {
+            color: var(--gray-color);
+        }
+
+        /* 经典纹样故事 */
+        .pattern-stories {
+            margin-top: 4rem;
+        }
+
+        .pattern-item {
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pattern-img {
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .pattern-text {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .pattern-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .pattern-text p {
+            color: var(--gray-color);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        /* 页脚样式 */
+        footer {
+    background-color: var(--dark-color);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+    /* 去掉 margin-left: 240px; */
+    margin-left: 0;
+    width: 100%; /* 占满全屏 */
+}
+
+/* 移动端保持不变 */
+@media (max-width: 1200px) {
+    footer {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-content p {
+            margin-top: 1rem;
+            color: #aaa;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 992px) {
+            .story-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 15px;
+            }
+            
+            .left::after, .right::after {
+                left: 15px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .detail-btn {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .banner h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .pattern-img {
+                width: 100%;
+            }
+
+            .section-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--dark-color);
+                padding: 1rem 5%;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+
+            .menu-toggle {
+                display: block;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner h1 {
+                font-size: 2rem;
+            }
+            
+            .banner p {
+                font-size: 1rem;
+            }
+            
+            .craft-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 左侧固定目录 -->
+    <aside class="sidebar" id="sidebar">
+        <h3 class="sidebar-title">云锦目录</h3>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="history.html" class="sidebar-link">
+                    <i class="fas fa-history sidebar-icon"></i>
+                    云锦相关历史故事
+                </a>
+            </li>
+            <li>
+                <a href="legend.html" class="sidebar-link">
+                    <i class="fas fa-magic sidebar-icon"></i>
+                    云锦相关传说
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <!-- 移动端目录切换按钮 -->
+            <div class="mobile-sidebar-toggle" id="mobileSidebarToggle">
+                <i class="fas fa-list"></i>
+            </div>
+            <a href="#" class="logo">云锦华章</a>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#story">云锦故事</a></li>
+                <li><a href="#history">历史渊源</a></li>
+                <li><a href="#craft">工艺特色</a></li>
+                <li><a href="#patterns">经典纹样</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Banner区域 -->
+    <section class="banner" id="home">
+        <div class="banner-content">
+            <h1>云锦 · 千年织就的东方瑰宝</h1>
+            <p>一缕丝线，织就盛世华章；一抹云锦，承载千年文脉</p>
+            <a href="#story" class="btn">聆听云锦故事</a>
+        </div>
+    </section>
+
+    <!-- 云锦故事 -->
+    <section class="container" id="story">
+        <h2 class="section-title">云锦的故事</h2>
+        <div class="story-content">
+            <img src="image\index02.jpg" alt="云锦织物" class="story-img">
+            <div class="story-text">
+                <h3>寸锦寸金，东方瑰宝</h3>
+                <p>云锦，中国传统的丝制工艺品，与蜀锦、宋锦并称为中国三大名锦，因其色泽光丽灿烂，美如天上云霞而得名，其用料考究，织造精细、图案精美、锦纹绚丽、格调高雅，在继承历代织锦的优秀传统基础上发展而来，又融会了其他各种丝织工艺的宝贵经验，达到了丝织工艺的顶峰状态，被誉为“锦中之王”。</p>
+                <p>云锦的诞生，源于皇家的极致追求。从元代开始，云锦便成为皇家御用贡品，明清时期达到鼎盛。每一匹云锦的诞生，都凝聚着匠人的心血与智慧，耗时数月甚至数年，正所谓“一匹云锦，半载光阴”。</p>
+                <p>如今，云锦早已走出皇宫，成为中华文化的璀璨名片，其精湛的织造技艺被列入《人类非物质文化遗产代表作名录》，继续向世界讲述着东方的织锦故事。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 历史渊源 -->
+    <section class="container" id="history">
+        <div class="section-header">
+            <h2 class="section-title">历史渊源</h2>
+            <!-- 跳转详情页面按钮 -->
+            <a href="history.html" class="detail-btn" target="_blank">
+                <i class="fas fa-book"></i> 查看详情
+            </a>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h4>元代 · 起源之初</h4>
+                    <p>云锦起源于元代，当时朝廷在南京设立“东、西织染局”，专门织造皇室用锦，云锦工艺开始初具雏形，主要为皇家服饰、宫廷陈设提供用料。</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h4>明代 · 工艺成熟</h4>
+                    <p>明代是云锦发展的重要时期，朝廷在南京设立“内织染局”，云锦织造工艺日趋成熟，形成了独特的“妆花”工艺，色彩更加丰富，纹样更加繁复。</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h4>清代 · 鼎盛时期</h4>
+                    <p>清代康熙、乾隆年间，云锦织造达到鼎盛，南京云锦生产规模空前，花色品种多达千种以上，成为皇家御用珍品，也是对外交流的重要礼品。</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h4>近现代 · 传承与新生</h4>
+                    <p>近代以来，云锦工艺曾一度濒临失传，经过几代匠人的抢救与保护，2009年，南京云锦织造技艺被列入《人类非物质文化遗产代表作名录》，如今云锦在传承古法的基础上不断创新，焕发出新的生机。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工艺特色 -->
+    <section class="container" id="craft">
+        <h2 class="section-title">工艺特色</h2>
+        <div class="craft-grid">
+            <div class="craft-card">
+                <div class="craft-icon">
+                    <i class="fas fa-thread"></i>
+                </div>
+                <h3>用料考究</h3>
+                <p>云锦选用上等桑蚕丝、金线、银线甚至孔雀羽线为原料，每一根丝线都经过精心挑选和处理，确保织出的锦缎光泽饱满、质感上乘。</p>
+            </div>
+            <div class="craft-card">
+                <div class="craft-icon">
+                    <i class="fas fa-hand-sparkles"></i>
+                </div>
+                <h3>手工织造</h3>
+                <p>云锦采用传统的大花楼木织机织造，需两人配合操作，一人在楼上提花，一人在楼下织造，一天仅能织出数厘米，真正的“寸锦寸金”。</p>
+            </div>
+            <div class="craft-card">
+                <div class="craft-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>色彩绚丽</h3>
+                <p>云锦配色多达十八种，运用“色晕”技法，使得色彩过渡自然，富丽堂皇，有“锦上添花”之美誉，在光线下呈现出不同的光泽效果。</p>
+            </div>
+            <div class="craft-card">
+                <div class="craft-icon">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <h3>纹样精美</h3>
+                <p>云锦纹样题材广泛，涵盖龙、凤、麒麟等瑞兽，牡丹、莲花等花卉，以及山水、人物等，寓意吉祥，构图饱满，具有极高的艺术价值。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 经典纹样故事 -->
+    <section class="container pattern-stories" id="patterns">
+        <h2 class="section-title">经典纹样的故事</h2>
+        
+        <div class="pattern-item">
+            <img src="image\yunjin01.jpg" alt="龙纹云锦" class="pattern-img">
+            <div class="pattern-text">
+                <h3>龙纹：皇权的象征</h3>
+                <p>龙纹是云锦中最具代表性的纹样之一，也是皇家御用的核心纹样。明清时期，龙纹云锦主要用于皇帝的龙袍，龙的形态矫健有力，五爪金龙象征着至高无上的皇权。每一条龙纹的织造都极为精细，鳞片、龙须、龙爪都清晰可见，体现了匠人高超的技艺。龙纹云锦不仅是工艺的体现，更是中国传统文化中龙图腾的重要载体，承载着吉祥、权威、昌盛的美好寓意。</p>
+            </div>
+        </div>
+
+        <div class="pattern-item">
+            <img src="image\index03.jpg" alt="牡丹纹云锦" class="pattern-img">
+            <div class="pattern-text">
+                <h3>牡丹纹：富贵吉祥</h3>
+                <p>牡丹纹是云锦中最常见的花卉纹样，素有“花中之王”的美誉，象征着富贵、吉祥、繁荣。云锦中的牡丹纹造型饱满，层次丰富，色彩艳丽，常与凤凰、蝴蝶等纹样组合，形成“凤穿牡丹”等经典图案。在清代，牡丹纹云锦不仅用于宫廷服饰，也作为赏赐品赠予王公大臣，是美好祝愿的象征，至今仍是云锦创作中最受欢迎的纹样之一。</p>
+            </div>
+        </div>
+
+        <div class="pattern-item">
+            <img src="image\yunjin01.jpg" alt="祥云纹云锦" class="pattern-img">
+            <div class="pattern-text">
+                <h3>祥云纹：祥瑞之兆</h3>
+                <p>祥云纹是中国传统纹样的经典，在云锦中应用广泛，常作为底纹或辅助纹样出现。云锦中的祥云纹形态飘逸灵动，线条流畅，色彩渐变自然，象征着吉祥如意、平步青云。祥云纹与其他纹样组合，如“祥云绕龙”“祥云捧日”等，都蕴含着美好的寓意，体现了中国人对美好生活的向往。这种纹样不仅美观，更承载着深厚的文化内涵，是东方美学的重要体现。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <h3>云锦华章</h3>
+            <p>© 2025 云锦文化传承工作室 版权所有</p>
+            <p>一寸云锦一寸金，千年文脉永流传</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 交互 -->
+    <script>
+        // 移动端导航菜单切换
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => { 
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // 移动端侧边目录切换
+        const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (mobileSidebarToggle) {
+            mobileSidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+            });
+        }
+
+        // 平滑滚动
+        const anchors = document.querySelectorAll('a[href^="#"]');
+        anchors.forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    if (window.innerWidth <= 768) {
+                        navLinks.style.display = 'none';
+                        sidebar.classList.remove('show'); // 移动端点击后隐藏侧边目录
+                    }
+                }
+            });
+        });
+
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(44, 44, 44, 0.95)';
+            } else {
+                nav.style.backgroundColor = 'var(--dark-color)';
+            }
+        });
+
+        // 侧边目录链接激活状态（根据滚动位置）
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(currentSection)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
