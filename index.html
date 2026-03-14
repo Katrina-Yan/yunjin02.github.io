@@ -37,7 +37,6 @@
             top: 0;
             width: 240px;
             height: 100vh;
-            background-color: var(--white);
             background-color: white;
             box-shadow: 2px 0 10px rgba(0,0,0,0.08);
             padding: 2rem 1rem;
@@ -141,7 +140,7 @@
             }
 
             .sidebar {
-                display: none; /* 移动端隐藏侧边目录 */
+                display: none; /* 移动端默认隐藏侧边目录 */
                 position: fixed;
                 left: 0;
                 top: 0;
@@ -151,13 +150,15 @@
             }
 
             .sidebar.show {
-                display: block; /* 点击菜单按钮显示 */
+                display: block; /* 点击按钮后显示 */
             }
 
             .mobile-sidebar-toggle {
-                display: block; /* 移动端显示目录切换按钮 */
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
                 color: white;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 cursor: pointer;
                 margin-right: 1rem;
             }
@@ -169,6 +170,18 @@
 
         .mobile-sidebar-toggle {
             display: none; /* 默认隐藏移动端目录按钮 */
+        }
+
+        /* 遮罩层 - 点击空白关闭目录 */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
         }
 
         /* Banner样式 */
@@ -239,6 +252,28 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
+        /* 新增：传说按钮样式（和详情按钮风格统一） */
+        .legend-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .legend-btn:hover {
+            background-color: #7a1f28;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
         /* 通用内容容器 */
         .container {
             max-width: 1200px;
@@ -249,6 +284,12 @@
         .section-header {
             text-align: center;
             margin-bottom: 3rem;
+            /* 新增：让标题和按钮横向排列更美观 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .section-title {
@@ -449,24 +490,16 @@
             line-height: 1.8;
         }
 
-        /* 页脚样式 */
+        /* 页脚样式 - 与导航栏对齐 */
         footer {
-    background-color: var(--dark-color);
-    color: white;
-    padding: 3rem 0;
-    text-align: center;
-    /* 去掉 margin-left: 240px; */
-    margin-left: 0;
-    width: 100%; /* 占满全屏 */
-}
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-left: 0;
+            width: 100%;
+        }
 
-/* 移动端保持不变 */
-@media (max-width: 1200px) {
-    footer {
-        margin-left: 0;
-        width: 100%;
-    }
-}
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -516,7 +549,7 @@
                 font-size: 2rem;
             }
 
-            .detail-btn {
+            .detail-btn, .legend-btn {
                 margin-left: 0;
                 margin-top: 1rem;
             }
@@ -536,7 +569,6 @@
             }
 
             .section-header {
-                display: flex;
                 flex-direction: column;
                 align-items: center;
             }
@@ -601,12 +633,16 @@
         </ul>
     </aside>
 
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
     <!-- 导航栏 -->
     <nav>
         <div class="nav-container">
-            <!-- 移动端目录切换按钮 -->
+            <!-- 移动端目录切换按钮（带文字提示） -->
             <div class="mobile-sidebar-toggle" id="mobileSidebarToggle">
                 <i class="fas fa-list"></i>
+                <span>目录</span>
             </div>
             <a href="#" class="logo">云锦华章</a>
             <div class="menu-toggle" id="mobile-menu">
@@ -633,7 +669,13 @@
 
     <!-- 云锦故事 -->
     <section class="container" id="story">
-        <h2 class="section-title">云锦的故事</h2>
+        <div class="section-header">
+            <h2 class="section-title">云锦的故事</h2>
+            <!-- 新增：查看云锦相关传说按钮 -->
+            <a href="legend.html" class="legend-btn" target="_blank">
+                <i class="fas fa-magic"></i> 查看云锦相关传说
+            </a>
+        </div>
         <div class="story-content">
             <img src="image\index02.jpg" alt="云锦织物" class="story-img">
             <div class="story-text">
@@ -769,11 +811,20 @@
         // 移动端侧边目录切换
         const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
         const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function openSidebar() {
+            sidebar.classList.add('show');
+            overlay.style.display = 'block';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('show');
+            overlay.style.display = 'none';
+        }
 
         if (mobileSidebarToggle) {
-            mobileSidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('show');
-            });
+            mobileSidebarToggle.addEventListener('click', openSidebar);
         }
 
         // 平滑滚动
@@ -790,7 +841,7 @@
                     });
                     if (window.innerWidth <= 768) {
                         navLinks.style.display = 'none';
-                        sidebar.classList.remove('show'); // 移动端点击后隐藏侧边目录
+                        closeSidebar(); // 点击后关闭目录
                     }
                 }
             });
